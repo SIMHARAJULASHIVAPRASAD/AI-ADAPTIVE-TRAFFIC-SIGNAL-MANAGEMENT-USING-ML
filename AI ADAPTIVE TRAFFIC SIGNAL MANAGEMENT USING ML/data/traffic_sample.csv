@@ -1,0 +1,7 @@
+timestamp,north_vehicles,south_vehicles,east_vehicles,west_vehicles,traffic_density,avg_speed,queue_length,weather,time_of_day,emergency_vehicle,current_phase
+2026-10-01T08:00:00,21,14,29,9,0.61,24.5,58,clear,peak,0,EW-Green
+2026-10-01T09:00:00,12,8,18,5,0.42,31.2,42,rainy,peak,0,EW-Green
+2026-10-01T10:00:00,9,7,15,4,0.31,36.4,30,cloudy,mid,0,EW-Green
+2026-10-01T12:00:00,7,5,12,3,0.24,41.7,21,clear,mid,0,NS-Green
+2026-10-01T17:00:00,19,11,23,8,0.57,28.1,51,cloudy,peak,0,EW-Green
+2026-10-01T18:00:00,24,16,31,10,0.68,22.9,66,rainy,peak,1,NS-Green

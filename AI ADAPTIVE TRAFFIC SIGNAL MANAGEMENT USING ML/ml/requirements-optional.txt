@@ -1,0 +1,4 @@
+# Optional live vehicle detection only.
+# The web dashboard itself has ZERO Python package dependencies.
+ultralytics>=8.3.0
+opencv-python>=4.10.0

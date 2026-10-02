@@ -1,0 +1,169 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#071018" />
+    <meta name="description" content="AI-powered adaptive traffic signal management dashboard using vehicle detection, reinforcement learning, and dynamic signal control." />
+    <title>Adaptive Traffic Control</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="brand-wrap">
+        <div class="brand-icon" aria-hidden="true">🚦</div>
+        <div>
+          <div class="brand-title">ADAPTIVE TRAFFIC CONTROL</div>
+          <div class="brand-subtitle">AI + ML Signal Management System</div>
+        </div>
+      </div>
+      <div class="status-pill"><span class="status-dot"></span> SYSTEM ONLINE</div>
+    </header>
+
+    <main class="page">
+      <section class="hero">
+        <div>
+          <div class="eyebrow">REAL-TIME INTELLIGENT TRANSPORT</div>
+          <h1>AI-Powered Adaptive <span>Traffic Signal Management</span></h1>
+          <p>
+            Simulated intersection control that combines vehicle density, weather, time-of-day,
+            and emergency-vehicle priority to produce dynamic signal timings.
+          </p>
+        </div>
+        <div class="hero-actions">
+          <button id="exportBtn" class="btn secondary">Export JSON</button>
+          <button id="resetBtn" class="btn primary">Reset Simulation</button>
+        </div>
+      </section>
+
+      <section class="kpi-grid" id="kpiGrid"></section>
+
+      <section class="section-grid two-col">
+        <article class="panel">
+          <div class="panel-head">
+            <div>
+              <div class="section-kicker">INTERSECTION CONTROL</div>
+              <h2>Adaptive Signal Management</h2>
+              <p>Cycle <span id="cycleNumber">#0</span> · current phase <span id="currentPhase">E-GREEN</span></p>
+            </div>
+            <div class="cycle-badge"><small>CYCLE</small><strong id="cycleSeconds">0s</strong></div>
+          </div>
+          <div class="intersection-wrap" id="intersection"></div>
+          <div class="direction-grid" id="directionCards"></div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head compact">
+            <div>
+              <div class="section-kicker">SIGNAL CYCLE TIMELINE</div>
+              <h2>Current phase allocation</h2>
+              <p>Adaptive timing based on the live simulation state.</p>
+            </div>
+            <div class="full-cycle">Full cycle: <strong id="fullCycle">0s</strong></div>
+          </div>
+          <div class="timeline" id="timeline"></div>
+          <div class="recommendation" id="recommendation"></div>
+          <div class="legend">
+            <span><i class="dot green"></i>Green</span>
+            <span><i class="dot amber"></i>Yellow</span>
+            <span><i class="dot red"></i>Red</span>
+            <span><i class="dot emergency"></i>Emergency</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="section-grid two-col">
+        <article class="panel">
+          <div class="panel-head compact">
+            <div>
+              <div class="section-kicker">SYSTEM PIPELINE</div>
+              <h2>End-to-end ML processing flow</h2>
+            </div>
+          </div>
+          <div class="pipeline">
+            <div class="pipeline-node"><span>📹</span><div><strong>Camera Input</strong><small>CCTV / IP camera feed</small></div></div>
+            <div class="pipeline-arrow">↓</div>
+            <div class="pipeline-node"><span>🖼️</span><div><strong>Frame Extraction</strong><small>Video → individual frames</small></div></div>
+            <div class="pipeline-arrow">↓</div>
+            <div class="pipeline-node"><span>🔎</span><div><strong>YOLO Detection</strong><small>Vehicle count &amp; classification</small></div></div>
+            <div class="pipeline-arrow">↓</div>
+            <div class="pipeline-node"><span>🧠</span><div><strong>RL Agent</strong><small>Reinforcement learning policy</small></div></div>
+            <div class="pipeline-arrow">↓</div>
+            <div class="pipeline-node"><span>🚦</span><div><strong>Signal Control</strong><small>Adaptive timing output</small></div></div>
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-head compact">
+            <div>
+              <div class="section-kicker">DATASET SCHEMA</div>
+              <h2>Traffic, environment &amp; signal features</h2>
+            </div>
+          </div>
+          <div class="schema-list">
+            <div><code>lane_1_count</code><span>Vehicles in lane 1</span><b>int</b></div>
+            <div><code>lane_2_count</code><span>Vehicles in lane 2</span><b>int</b></div>
+            <div><code>traffic_density</code><span>Road occupancy (0–1)</span><b>float</b></div>
+            <div><code>avg_speed</code><span>Average speed (km/h)</span><b>float</b></div>
+            <div><code>queue_length</code><span>Queue length (m)</span><b>float</b></div>
+            <div><code>weather</code><span>clear / cloudy / rainy</span><b>cat</b></div>
+            <div><code>time_of_day</code><span>peak / mid / off-peak</span><b>cat</b></div>
+            <div><code>emergency_vehicle</code><span>1 = detected</span><b>bool</b></div>
+            <div><code>current_phase</code><span>NS-Green / EW-Green</span><b>cat</b></div>
+          </div>
+        </article>
+      </section>
+
+      <section class="panel simulation-panel">
+        <div class="panel-head compact">
+          <div>
+            <div class="section-kicker">ML SIMULATION MODE</div>
+            <h2>Adjust parameters to see adaptive signal suggestions</h2>
+            <p>The controls are intentionally deterministic, so the same inputs produce repeatable outputs.</p>
+          </div>
+          <div class="cycle-badge"><small>CALCULATED CYCLE</small><strong id="simCycle">0s</strong></div>
+        </div>
+
+        <div class="control-row">
+          <div>
+            <label>TIME OF DAY</label>
+            <div class="segmented" id="timeControls">
+              <button data-time="peak">🌇 Peak</button>
+              <button data-time="mid">☀️ Mid</button>
+              <button data-time="off">🌙 Off-peak</button>
+            </div>
+          </div>
+          <div>
+            <label>WEATHER</label>
+            <div class="segmented" id="weatherControls">
+              <button data-weather="clear">🟡 Clear</button>
+              <button data-weather="cloudy">☁️ Cloudy</button>
+              <button data-weather="rainy">🌧️ Rainy</button>
+            </div>
+          </div>
+        </div>
+
+        <div class="simulation-grid" id="simulationGrid"></div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-head compact">
+          <div>
+            <div class="section-kicker">WAIT TIME COMPARISON</div>
+            <h2>Traditional vs ML-Adaptive signal control</h2>
+            <p>Reference scenario used to visualize the expected impact of adaptive phase allocation.</p>
+          </div>
+          <div class="chart-legend"><span><i class="line traditional"></i>Traditional</span><span><i class="line adaptive"></i>ML-Adaptive</span></div>
+        </div>
+        <div id="waitChart" class="chart"></div>
+      </section>
+
+      <section class="footer-note">
+        <strong>GitHub-ready demo:</strong> this repository runs fully offline with a Python standard-library server. The ML folder contains the adaptive optimizer, a small Q-learning trainer, and an optional YOLO integration point.
+      </section>
+    </main>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+    <script src="app.js"></script>
+  </body>
+</html>
